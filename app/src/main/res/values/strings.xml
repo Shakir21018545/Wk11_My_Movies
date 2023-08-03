@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Wk11 My Movies</string>
+
+
+    <string name="title_activity_main">Insert Movie</string>
+    <string name="title_activity_answer">Show Movie</string>
+    <string name="title_Edit_Movie">Modify Movie</string>
+
+    <string-array name="spinnerItems">
+        <item>G</item>
+        <item>M18</item>
+        <item>PG</item>
+        <item>PG13</item>
+        <item>R21</item>
+        <item>NC16</item>
+    </string-array>
+</resources>
