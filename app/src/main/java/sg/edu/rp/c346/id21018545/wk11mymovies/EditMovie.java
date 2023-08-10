@@ -1,5 +1,6 @@
 package sg.edu.rp.c346.id21018545.wk11mymovies;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class EditMovie extends AppCompatActivity {
@@ -96,37 +98,59 @@ public class EditMovie extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper dbh = new DBHelper(EditMovie.this);
-                currentMovie.setTitle(etTitle.getText().toString().trim());
-                currentMovie.setGenre(etGenre.getText().toString().trim());
+
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(EditMovie.this);
+
+                myBuilder.setTitle("Danger");
+                myBuilder.setMessage("Are you sure you want to Update the changes");
+                myBuilder.setCancelable(false);
+                myBuilder.setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                myBuilder.setNegativeButton("UPDATE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DBHelper dbh = new DBHelper(EditMovie.this);
+                        currentMovie.setTitle(etTitle.getText().toString().trim());
+                        currentMovie.setGenre(etGenre.getText().toString().trim());
 
 
-                int year = 0;
-                try {
-                    year = Integer.valueOf(etYear.getText().toString().trim());
-                } catch (Exception e){
-                    Toast.makeText(EditMovie.this, "Invalid year", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                currentMovie.setYearReleased(year);
+                        int year = 0;
+                        try {
+                            year = Integer.valueOf(etYear.getText().toString().trim());
+                        } catch (Exception e){
+                            Toast.makeText(EditMovie.this, "Invalid year", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        currentMovie.setYearReleased(year);
 
-                int selectedRB = rg.getCheckedRadioButtonId();
-                RadioButton rb = (RadioButton) findViewById(selectedRB);
-                currentMovie.setStars(Integer.parseInt(rb.getText().toString()));
-
-
-                Spinner mySpinner = (Spinner)findViewById(R.id.spinner);
-                String ratings = mySpinner.getSelectedItem().toString();
-                currentMovie.setRatings(ratings);
+                        int selectedRB = rg.getCheckedRadioButtonId();
+                        RadioButton rb = (RadioButton) findViewById(selectedRB);
+                        currentMovie.setStars(Integer.parseInt(rb.getText().toString()));
 
 
-                int result = dbh.updateMovie(currentMovie);
-                if (result>0){
-                    Toast.makeText(EditMovie.this, "Movie updated", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(EditMovie.this, "Update failed", Toast.LENGTH_SHORT).show();
-                }
+                        Spinner mySpinner = (Spinner)findViewById(R.id.spinner);
+                        String ratings = mySpinner.getSelectedItem().toString();
+                        currentMovie.setRatings(ratings);
+
+
+                        int result = dbh.updateMovie(currentMovie);
+                        if (result>0){
+                            Toast.makeText(EditMovie.this, "Movie updated", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(EditMovie.this, "Update failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                });
+
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
+
+
             }
         });
 
@@ -134,21 +158,67 @@ public class EditMovie extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper dbh = new DBHelper(EditMovie.this);
-                int result = dbh.deleteMovie(currentMovie.getId());
-                if (result>0){
-                    Toast.makeText(EditMovie.this, "Movie deleted", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(EditMovie.this, "Delete failed", Toast.LENGTH_SHORT).show();
-                }
+
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(EditMovie.this);
+
+                myBuilder.setTitle("Danger");
+                myBuilder.setMessage("Are you sure you want to delete the movie " + currentMovie.getTitle());
+                myBuilder.setCancelable(false);
+                myBuilder.setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                myBuilder.setNegativeButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        DBHelper dbh = new DBHelper(EditMovie.this);
+                        int result = dbh.deleteMovie(currentMovie.getId());
+                        if (result>0){
+                            Toast.makeText(EditMovie.this, "Movie deleted", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(EditMovie.this, "Delete failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
+
+
             }
         });
+
+
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(EditMovie.this);
+
+                myBuilder.setTitle("Danger");
+                myBuilder.setMessage("Are you sure you want to discard the changes");
+                myBuilder.setCancelable(false);
+                myBuilder.setPositiveButton("DO NOT DISCARD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                myBuilder.setNegativeButton("DISCARD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
+
+
             }
         });
 
