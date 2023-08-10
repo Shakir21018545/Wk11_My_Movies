@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,8 @@ public class AnswerActivity extends AppCompatActivity {
     ArrayList<String> years;
     CustomAdapter adapter;
 
+    Spinner spinner;
+
 
 
     @Override
@@ -32,10 +35,10 @@ public class AnswerActivity extends AppCompatActivity {
         DBHelper dbh = new DBHelper(this);
         MovieList.clear();
         MovieList.addAll(dbh.getAllMovies());
-        adapter.notifyDataSetChanged();
-
         years.clear();
         years.addAll(dbh.getYears());
+        adapter.notifyDataSetChanged();
+
 
     }
 
@@ -48,6 +51,7 @@ public class AnswerActivity extends AppCompatActivity {
 
         lv = this.findViewById(R.id.lv);
         btnPG13 = this.findViewById(R.id.btnPG13);
+        spinner = findViewById(R.id.spinner);
 
         DBHelper dbh = new DBHelper(this);
         MovieList = dbh.getAllMovies();
@@ -78,6 +82,59 @@ public class AnswerActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+                switch(position){
+                    case 0:
+                        break;
+                    case 1:
+                        DBHelper dbh = new DBHelper(AnswerActivity.this);
+                        MovieList.clear();
+                        MovieList.addAll(dbh.getAllMoviesByRatings("G"));
+                        adapter.notifyDataSetChanged();
+                        break;
+
+                    case 2:
+                        dbh = new DBHelper(AnswerActivity.this);
+                        MovieList.clear();
+                        MovieList.addAll(dbh.getAllMoviesByRatings("M18"));
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case 3:
+                        dbh = new DBHelper(AnswerActivity.this);
+                        MovieList.clear();
+                        MovieList.addAll(dbh.getAllMoviesByRatings("PG"));
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case 4:
+                        dbh = new DBHelper(AnswerActivity.this);
+                        MovieList.clear();
+                        MovieList.addAll(dbh.getAllMoviesByRatings("PG13"));
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case 5:
+                        dbh = new DBHelper(AnswerActivity.this);
+                        MovieList.clear();
+                        MovieList.addAll(dbh.getAllMoviesByRatings("R21"));
+                        adapter.notifyDataSetChanged();
+                        break;
+                    case 6:
+                        dbh = new DBHelper(AnswerActivity.this);
+                        MovieList.clear();
+                        MovieList.addAll(dbh.getAllMoviesByRatings("NC16"));
+                        adapter.notifyDataSetChanged();
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent){
+
+            }
+        });
+
+
 
 
 
